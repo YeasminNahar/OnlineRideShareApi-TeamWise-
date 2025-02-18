@@ -1,0 +1,76 @@
+
+
+<div class="w-screen h-screen  relative overflow-scroll" style="scrollbar-width: thin;">
+  <div class="absolute top-0 left-0 w-72 h-72 bg-blue-500 rounded-full blur-3xl animate-pulse opacity-10"></div>
+  <!-- <div class="absolute top-0 right-0 w-72 h-72 bg-green-500 rounded-full blur-3xl animate-pulse opacity-20"></div>
+  <div class="absolute bottom-0 left-0 w-72 h-72 bg-purple-500 rounded-full blur-3xl animate-pulse opacity-20"></div> -->
+  <div class="absolute bottom-0 right-0 w-72 h-72 bg-red-500 rounded-full blur-3xl animate-pulse opacity-10"></div>
+
+
+
+  <div *ngIf="isLoading" class="loading-overlay">
+    <div class="spinner"></div>
+  </div>
+
+
+<div class="container mx-auto p-6">
+    <!-- Header Section -->
+    <h1 class="text-2xl font-bold text-center mb-4">Payment Details</h1>
+  
+    <!-- Payment Table -->
+    <div class="overflow-x-auto h-[80vh]" style="scrollbar-width: thin;">
+      <table class="w-full table-auto text-center border border-gray-300 rounded-lg">
+        <thead class="text-green-800 sticky top-0 z-10">
+          <tr class="text-center ">
+            <th class="px-4 py-2">Payment ID</th>
+            <th class="px-4 py-2">Invoice ID</th>
+            <th class="px-4 py-2">Amount</th>
+            <th class="px-4 py-2">Payment Date</th>
+            <th class="px-4 py-2">Pamyment Method</th>
+            <th class="px-4 py-2">Status</th>
+            <th class="px-4 py-2 text-center">Actions</th>
+          </tr>
+        </thead>
+        <tbody  *ngFor="let paymentItem of allPayments; let index = index" class="bg-white">            
+            <tr class="border-b text-center ">
+              <!-- Index -->
+              <td class="px-4 py-2">{{ index + 1 }}</td>
+          
+              <!-- Invoice ID -->
+              <td class="px-4 py-2">{{ paymentItem.invoiceId || 'N/A' }}</td>
+          
+              <!-- Amount -->
+              <td class="px-4 py-2">{{ paymentItem.amount | currency:'USD' }}</td>
+             
+              <!-- Payment Date -->
+              <td class="px-4 py-2">{{ paymentItem.paymentDate | date:'yyyy-MM-dd' }}</td>
+              <span *ngFor="let InvoiceItem of  allInvoice">
+                <span *ngFor="let PaymentsMethodItem of  allPaymentsMethod">
+                  <td class="px-4 py-2"  *ngIf="((paymentItem.invoiceId == InvoiceItem.invoiceId) && (InvoiceItem.paymentMethodId== PaymentsMethodItem.paymentMethodId))">
+                   {{PaymentsMethodItem.methodType}}
+                  </td>
+                </span>
+              </span>             
+              
+              <!-- Status -->
+              <td 
+                class="px-4 py-2" 
+                [ngClass]="paymentItem.status === 'Paid' ? 'text-green-500' : 'text-red-500'">
+                {{ paymentItem.status || 'Pending' }}
+              </td>
+          
+              <!-- Action Button -->
+              <td class="px-4 py-2 text-center">
+                <button
+                  class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+                  (click)="onInvoiceClick(paymentItem)"
+                >
+                  View Invoice
+                </button>
+              </td>
+            </tr>
+          </tbody>  
+      </table>
+    </div>
+  </div>
+</div>
